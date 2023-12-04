@@ -76,6 +76,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <scala.version>2.12.18</scala.version>
     <project.build.type>FastBuild</project.build.type>
+    <spotless.version>2.41.1</spotless.version>
   </properties>
 
   <dependencies>
@@ -100,6 +101,11 @@
       <artifactId>mockito-core</artifactId>
       <version>2.23.4</version>
       <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.diffplug.spotless</groupId>
+      <artifactId>spotless-maven-plugin</artifactId>
+      <version>${spotless.version}</version>
     </dependency>
   </dependencies>
 
@@ -203,7 +209,7 @@
               <sourceDirectories>
                 <sourceDirectory>${project.basedir}</sourceDirectory>
               </sourceDirectories>
-	      <includes>**/*.xml,**/*.xsd,**/*.md,**/*.k,**/*.kore,**/*.java,**/*.scala,**/*.jj,**/*.jjt,**/*.str,**/*.css,**/*.sty,**/*.tex,**/*.cls</includes>
+              <includes>**/*.xml,**/*.xsd,**/*.md,**/*.k,**/*.kore,**/*.java,**/*.scala,**/*.jj,**/*.jjt,**/*.str,**/*.css,**/*.sty,**/*.tex,**/*.cls</includes>
               <configLocation>src/main/config/checkstyle-copyright.xml</configLocation>
               <failsOnError>true</failsOnError>
               <consoleOutput>true</consoleOutput>
@@ -276,16 +282,26 @@
         </executions>
       </plugin>
       <plugin>
-        <groupId>com.spotify.fmt</groupId>
-        <artifactId>fmt-maven-plugin</artifactId>
-        <version>2.21.1</version>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <version>${spotless.version}</version>
         <executions>
           <execution>
             <goals>
-              <goal>format</goal>
+              <goal>apply</goal>
             </goals>
+            <phase>process-sources</phase>
           </execution>
         </executions>
+        <configuration>
+          <java>
+            <includes> **/*.java </includes>
+            <googleJavaFormat>
+              <version>1.18.1</version>
+              <style>GOOGLE</style>
+            </googleJavaFormat>
+          </java>
+        </configuration>
       </plugin>
     </plugins>
   </build>
